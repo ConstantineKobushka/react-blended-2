@@ -1,4 +1,5 @@
 import { FiSearch } from 'react-icons/fi';
+
 import style from './Form.module.css';
 
 export const Form = ({ onSubmit }) => {
@@ -9,6 +10,7 @@ export const Form = ({ onSubmit }) => {
     onSubmit(value);
     event.currentTarget.reset();
   };
+
   return (
     <form onSubmit={handleSubmit} className={style.form}>
       <button className={style.button} type="submit">
