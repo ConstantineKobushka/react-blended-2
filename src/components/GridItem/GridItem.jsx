@@ -1,5 +1,6 @@
-import style from './GridItem.module.css';
+import styles from './GridItem.module.css';
 
-export const GridItem = ({ children }) => {
-  return <li className={style.item}>{children}</li>;
+const GridItem = ({ children }) => {
+  return <li className={styles.item}>{children}</li>;
 };
+export default GridItem;

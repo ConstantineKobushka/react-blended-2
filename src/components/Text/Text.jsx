@@ -1,15 +1,17 @@
-import style from './Text.module.css';
+import styles from './Text.module.css';
 
-export const Text = ({ children, textAlign = '', marginBottom = '0' }) => {
+const Text = ({ children, textAlign = '', marginBottom = '0' }) => {
   return (
     <p
       className={[
-        style['text'],
-        style[textAlign],
-        style[`marginBottom${marginBottom}`],
+        styles['text'],
+        styles[textAlign],
+        styles[`marginBottom${marginBottom}`],
       ].join(' ')}
     >
       {children}
     </p>
   );
 };
+
+export default Text;

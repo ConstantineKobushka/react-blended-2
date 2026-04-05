@@ -1,8 +1,15 @@
-# React + Vite
+# React Blended 2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Перші кроки
 
-Currently, two official plugins are available:
+- Створіть копію репозиторію (форк);
+- Клонуйте репозиторій на ваш ПК/ноутбук
+- Встановіть залежності через `npm i`;
+- Ознайомтеся зі структурою репозиторію;
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> **ПРИМІТКА:** стартові файли репозиторію включають необхідний набір компонентів та допоміжних файлів, функцій для створення двох додатків. Для розділення цих двох задач в компоненті App реалізовани таби для переключення між задачами. Для цього використана бібліотека `react-tabs`, яка розділяє інтерфейс і підключає 2 основні компоненти - `Todos` та `Photos`. Ці компоненти знаходяться в `src/tabs/` і саме в цих компонентах, а не в `App` будуть виконуватись відповідні задачі.
+
+### Завдання
+
+- [TODO LIST (Модуль 3)](/task_1-todos.md)
+- [Пошук зображень (Модуль 4)](/task_2-photos.md)

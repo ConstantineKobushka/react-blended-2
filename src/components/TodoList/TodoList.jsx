@@ -1,21 +1,23 @@
-import { Grid, TodoListItem, GridItem } from 'components';
+import Grid from '../Grid/Grid';
+import GridItem from '../GridItem/GridItem';
+import TodoListItem from '../TodoListItem/TodoListItem';
 
-export const TodoList = ({ todos, removeTodo, editTodo }) => {
+const TodoList = ({ todos, deletTodo, editTodo }) => {
   return (
     <Grid>
-      {todos.map((item, index) => {
-        return (
-          <GridItem key={item.id}>
-            <TodoListItem
-              id={item.id}
-              text={item.text}
-              count={index + 1}
-              removeTodo={removeTodo}
-              editTodo={editTodo}
-            />
-          </GridItem>
-        );
-      })}
+      {todos.map(({ id, text }, index) => (
+        <GridItem key={id}>
+          <TodoListItem
+            id={id}
+            text={text}
+            count={index + 1}
+            deletTodo={deletTodo}
+            editTodo={editTodo}
+          />
+        </GridItem>
+      ))}
     </Grid>
   );
 };
+
+export default TodoList;

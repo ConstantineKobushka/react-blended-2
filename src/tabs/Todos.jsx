@@ -1,46 +1,76 @@
-import { Text, Form, TodoList, EditForm } from 'components';
-import { set } from 'date-fns';
-import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 
-export const Todos = () => {
-  const getItemFromLocalStorage = () => {
-    return JSON.parse(localStorage.getItem('todo')) ?? [];
+import { nanoid } from 'nanoid';
+
+import Form from '../components/Form/Form';
+import Text from '../components/Text/Text';
+import TodoList from '../components/TodoList/TodoList';
+import EditForm from '../components/EditForm/EditForm';
+
+const Todos = () => {
+  const loadFromStorage = (key, fallback) => {
+    try {
+      const data = localStorage.getItem(key);
+      if (!data) return fallback;
+
+      const parsed = JSON.parse(data);
+      return Array.isArray(parsed) ? parsed : fallback;
+    } catch {
+      return fallback;
+    }
   };
 
-  const [todos, setTodos] = useState(getItemFromLocalStorage);
+  const [todos, setTodos] = useState(() => loadFromStorage('todos', []));
   const [isEditing, setIsEditing] = useState(false);
   const [currentTodo, setCurrentTodo] = useState({});
 
-  const addTodo = text => {
-    setTodos([...todos, { text, id: nanoid() }]);
-  };
-
   useEffect(() => {
-    const data = JSON.stringify(todos);
-    localStorage.setItem('todo', data);
+    localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const removeTodoHendler = idDelete => {
-    setTodos(todos.filter(item => item.id !== idDelete));
+  const validateTodo = (text, id = null) => {
+    if (!text) {
+      alert('The field cannot be empty');
+      return false;
+    }
+
+    const exists = todos.some(todo => todo.text === text && todo.id !== id);
+
+    if (exists) {
+      alert('This task already exists');
+      return false;
+    }
+
+    return true;
   };
 
-  const EditTodoHandler = todoData => {
+  const addTodo = text => {
+    if (!validateTodo(text)) return;
+    setTodos(prevTodos => [...prevTodos, { id: nanoid(), text }]);
+  };
+
+  const deletTodo = id => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  };
+
+  const editTodo = curentTodo => {
     setIsEditing(true);
-    setCurrentTodo(todoData);
+    setCurrentTodo(curentTodo);
   };
 
-  const updateTodoHandler = todoData => {
-    setTodos(
-      todos.map(item =>
-        item.id === todoData.id ? { ...item, text: todoData.text } : item,
-      ),
-    );
-  };
-
-  const cancelUpdateHandler = () => {
+  const cancelUpdate = () => {
     setIsEditing(false);
     setCurrentTodo({});
+  };
+
+  const updateTodo = (id, text) => {
+    if (!validateTodo(text, id)) return;
+
+    setTodos(prevTodos =>
+      prevTodos.map(todo => (todo.id === id ? { ...todo, text } : todo))
+    );
+
+    cancelUpdate();
   };
 
   return (
@@ -48,21 +78,19 @@ export const Todos = () => {
       {isEditing ? (
         <EditForm
           defaultValue={currentTodo}
-          updateTodo={updateTodoHandler}
-          cancelUpdate={cancelUpdateHandler}
+          cancelUpdate={cancelUpdate}
+          updateTodo={updateTodo}
         />
       ) : (
         <Form onSubmit={addTodo} />
       )}
-      <TodoList
-        todos={todos}
-        removeTodo={removeTodoHendler}
-        editTodo={EditTodoHandler}
-        currentTodo={currentTodo}
-      />
+
+      <TodoList todos={todos} deletTodo={deletTodo} editTodo={editTodo} />
       {todos.length === 0 && (
         <Text textAlign="center">There are no any todos ...</Text>
       )}
     </>
   );
 };
+
+export default Todos;

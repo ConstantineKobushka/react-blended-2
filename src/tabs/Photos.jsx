@@ -1,27 +1,31 @@
 import { useEffect, useState } from 'react';
 
-import { Button, Form, Loader, PhotosGallery, Text } from 'components';
+import Form from '../components/Form/Form';
+import PhotosGallery from '../components/PhotosGallery/PhotosGallery';
+import Text from '../components/Text/Text';
+import Button from '../components/Button/Button';
+import Loader from '../components/Loader/Loader';
+import { getPhotos } from '../apiService/photos';
 
-import { getPhotos } from 'apiService/photos';
-
-export const Photos = () => {
+const Photos = () => {
   const [images, setImages] = useState([]);
-  const [query, setQuery] = useState(false);
+  const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [totalResalt, setTotalResalt] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState(true);
 
   useEffect(() => {
-    if (!query) return;
+    if (!query.trim()) return;
+    let isActive = true;
+
     const fetchData = async () => {
       try {
         setError(false);
-        setLoading(true);
+        setIsLoading(true);
         setMessage(false);
         const data = await getPhotos(query, page);
-        console.log(data);
         if (data.photos.length === 0) throw new Error('Photos not found');
         if (page === 1) {
           setImages(data.photos);
@@ -32,29 +36,33 @@ export const Photos = () => {
         }
         setTotalResalt(data.total_results);
       } catch (error) {
-        console.log(error.message);
+        if (!isActive) return;
         setError(error.message);
       } finally {
-        setLoading(false);
+        if (isActive) setIsLoading(false);
       }
     };
     fetchData();
+
+    return () => {
+      isActive = false;
+    };
   }, [query, page]);
 
   function onSearchHandler(searchValue) {
+    setImages([]);
     setQuery(searchValue);
     setPage(1);
   }
 
   function onLoadMoreHandler() {
-    console.log(images.length);
-    setPage(page + 1);
+    setPage(prev => prev + 1);
   }
 
   return (
     <>
       <Form onSubmit={onSearchHandler} />
-      {loading && <Loader />}
+      {isLoading && <Loader />}
       {message && <Text textAlign="center">Let`s begin search 🔎</Text>}
 
       {error ? (
@@ -68,3 +76,5 @@ export const Photos = () => {
     </>
   );
 };
+
+export default Photos;

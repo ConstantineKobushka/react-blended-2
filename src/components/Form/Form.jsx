@@ -1,24 +1,23 @@
 import { FiSearch } from 'react-icons/fi';
 
-import style from './Form.module.css';
+import styles from './Form.module.css';
 
-export const Form = ({ onSubmit }) => {
-  const handleSubmit = event => {
+const Form = ({ onSubmit }) => {
+  const onFofmSubmit = event => {
     event.preventDefault();
-    const { value } = event.currentTarget.elements.search;
-
-    onSubmit(value);
+    const inputValue = event.currentTarget.elements.search.value.trim();
+    onSubmit(inputValue);
     event.currentTarget.reset();
   };
 
   return (
-    <form onSubmit={handleSubmit} className={style.form}>
-      <button className={style.button} type="submit">
+    <form className={styles.form} onSubmit={onFofmSubmit}>
+      <button className={styles.button} type="submit">
         <FiSearch size="16px" />
       </button>
 
       <input
-        className={style.input}
+        className={styles.input}
         placeholder="What do you want to write?"
         name="search"
         required
@@ -27,3 +26,5 @@ export const Form = ({ onSubmit }) => {
     </form>
   );
 };
+
+export default Form;
