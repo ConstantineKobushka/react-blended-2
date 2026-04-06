@@ -18,7 +18,6 @@ const Photos = () => {
 
   useEffect(() => {
     if (!query.trim()) return;
-    let isActive = true;
 
     const fetchData = async () => {
       try {
@@ -36,17 +35,13 @@ const Photos = () => {
         }
         setTotalResalt(data.total_results);
       } catch (error) {
-        if (!isActive) return;
         setError(error.message);
       } finally {
-        if (isActive) setIsLoading(false);
+        setIsLoading(false);
       }
     };
-    fetchData();
 
-    return () => {
-      isActive = false;
-    };
+    fetchData();
   }, [query, page]);
 
   function onSearchHandler(searchValue) {
