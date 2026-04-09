@@ -5,16 +5,17 @@ import PhotosGalleryItem from '../PhotosGalleryItem/PhotosGalleryItem';
 const PhotosGallery = ({ images }) => {
   return (
     <Grid>
-      {images.map(({ id, avg_color, src, alt }) => (
-        <GridItem key={id}>
-          <PhotosGalleryItem
-            id={id}
-            avg_color={avg_color}
-            src={src}
-            alt={alt}
-          />
-        </GridItem>
-      ))}
+      {Array.isArray(images) &&
+        images.map(({ id, avg_color, src, alt }) => (
+          <GridItem key={id}>
+            <PhotosGalleryItem
+              id={id}
+              avg_color={avg_color}
+              src={src}
+              alt={alt}
+            />
+          </GridItem>
+        ))}
     </Grid>
   );
 };

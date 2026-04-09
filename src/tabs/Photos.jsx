@@ -8,7 +8,7 @@ import Loader from '../components/Loader/Loader';
 import { getPhotos } from '../apiService/photos';
 
 const Photos = () => {
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(null);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [totalResalt, setTotalResalt] = useState(1);
@@ -25,6 +25,7 @@ const Photos = () => {
         setIsLoading(true);
         setMessage(false);
         const data = await getPhotos(query, page);
+        console.log(data);
         if (data.photos.length === 0) throw new Error('Photos not found');
         if (page === 1) {
           setImages(data.photos);
@@ -65,7 +66,7 @@ const Photos = () => {
       ) : (
         <PhotosGallery images={images} />
       )}
-      {images.length > 0 && images.length < totalResalt && !error && (
+      {Array.isArray(images) && images.length < totalResalt && !error && (
         <Button onClick={onLoadMoreHandler}>Load more</Button>
       )}
     </>
